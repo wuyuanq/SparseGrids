@@ -1,0 +1,48 @@
+
+# Author:
+#   Yuanqing Wu, KAUST, Saudi Arabia
+#
+# History:
+#   2017-2-9 by Yuanqing Wu
+#
+# Support:
+#   wuyuanq@gmail.com
+
+PROG = sg_hpc
+defaults: ${PROG}
+
+FCC = gfortran
+
+#FCFLAGS = -O3 -fdefault-real-8 -g
+#FCFLAGS = -g 
+#FCFLAGS = -O3 -fbounds-check 
+FCFLAGS = -g -fopenmp -fdefault-integer-8
+
+VPATH = ../../FlashCalculation
+
+FLASHSRCS = RST_globalFlashData.F90 RST_mathlib.F90 RST_PREOS.F90 RST_comprefac.F90 \
+RST_fugacitycoef.F90 RST_stability.F90 RST_pmv.F90 RST_flashcalculation.F90
+
+FSRCS = RST_globalSgData.F90 RST_sg.F90 infile_sg.F90
+      
+%.o: %.F90
+	$(FCC) -c $(FCFLAGS) $^ -o $@
+
+FLASHOBJS = $(FLASHSRCS:.F90=.o)
+FOBJS = $(FSRCS:.F90=.o)
+
+$(PROG): $(FLASHOBJS) $(FOBJS)
+	$(FCC) $(FCFLAGS) $(FLASHOBJS) $(FOBJS) -o $(PROG)
+
+all: $(PROG)
+
+.PHONY: clean
+
+clean:
+	rm -rf *.mod *.o *.dSYM *.asv $(PROG)
+
+run: ${PROG}
+	./${PROG}
+
+
+
