@@ -175,7 +175,7 @@ If you use this repository in academic research, please cite the corresponding p
 
 # License
 
-This repository is intended for academic research.
+MIT license.
 
 ---
 
